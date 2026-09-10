@@ -1,0 +1,28 @@
+# Derived: regenerable from what IS in this repository
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Derived, but unrecoverable if lost - see open problem 1
+# Created by the ingestion code, never by hand
+data/
+artifacts/
+
+# Secrets - the only entries here that are irreversible if missed
+# .env.example IS tracked: it carries the shape, never the values
+.env
+*.pem
+*.key
+
+# Machine / editor / OS
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+*.log
+
+# Deliberately NOT ignored:
+#   uv.lock
+#   .python-version
+#   .gitkeep
