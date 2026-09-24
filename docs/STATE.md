@@ -4,9 +4,9 @@
 > share history: the only things that persist are the instructions and this
 > knowledge. It is updated at the end of EVERY session.
 
-**Last updated:** 2026-09-12
+**Last updated:** 2026-09-24
 **Current phase:** 1 — Foundation
-**Week:** 4 of 8 (calendar). Effective work: session 2 of the phase.
+**Week:** 6 of 8 (calendar). Effective work: session 2 of the phase.
 **Cumulative hours:** ~8 h
 
 ---
@@ -87,6 +87,7 @@ package is installed editable; `import ercot_forecast` resolves to
 | 2026-09-10 | **Authentication: HTTPS + Git Credential Manager**, not PAT or SSH | Ships with Git for Windows, needs no setup, uses GitHub's OAuth flow in a browser and stores the token encrypted in Windows Credential Manager. No raw secret is ever handled, pasted or rotated. Worked first try |
 | 2026-09-10 | GitHub repo created **empty** (no README, no .gitignore, no licence) | An initialised remote has a commit with no common ancestor with the local root commit; the first push is rejected and the usual escapes (`--allow-unrelated-histories`, force-push) teach the workflow wrong |
 | 2026-09-10 | Conventional Commits (`chore:`, `feat:`, `fix:`…) + imperative mood | Free to adopt, reads as professional, and lets CI generate a changelog in Phase 2 |
+| 2026-09-24 | **Project instructions rewritten: short by default, depth on demand** | Reading long responses was eating most of the session budget, leaving little for execution. The calibrated depth rule already existed but was one exception inside a section written for depth, so it lost. Now brevity is the default, "deeper" expands one point, and depth has three tiers (reversible / hard to reverse / methodology-critical), with check questions only in the critical tier, delivered in short rounds |
 
 ---
 
@@ -122,7 +123,7 @@ Item 6 — `CLAUDE.md` at the root: the hard rules, the pipeline order, the
 point-in-time discipline, the depth rule.
 
 **Budget warning, raised under hard rule 8:** Phase 1 is 8 calendar weeks and
-week 4 is starting with zero ingestion code written. Setup does not repeat, but
+week 6 is under way with zero ingestion code written. Setup does not repeat, but
 items 5 and 6 are documentation. If session 3 spends its full budget on prose,
 that is three sessions of meta-work before a single byte of ERCOT data exists on
 disk. Cap them and move on.
@@ -147,7 +148,7 @@ disk. Cap them and move on.
 3. ~~`docs/` has no `.gitkeep`.~~ **CLOSED.** It holds ROADMAP.md, STATE.md and
    STRUCTURE.md, so it travels to Git on its own content.
 
-4. **Time budget.** Four calendar weeks gone, setup at 4 of 6, no pipeline code.
+4. **Time budget.** Week 6 of 8, setup at 4 of 6, no pipeline code.
    See the warning in section 4.
 
 5. **`README.md` is empty and public.** Anyone reaching the repo today sees a
@@ -159,7 +160,7 @@ disk. Cap them and move on.
 
 | What | Why it failed |
 |---|---|
-| **Uniform depth across all explanations** (Claude) | Recorded in session 1. **It recurred in session 2:** full depth was spent on Windows PATH scopes and file encodings — both reversible in minutes. Leonardo flagged the session was dragging. The rule is in section 2; applying it is the open problem |
+| **Uniform depth across all explanations** (Claude) | Recorded in session 1. **It recurred in session 2:** full depth was spent on Windows PATH scopes and file encodings — both reversible in minutes. Leonardo flagged the session was dragging. **Root cause (2026-09-24):** the instructions made depth the default and the depth rule a single exception, so the rule lost. Fixed by rewriting them: short by default, depth pulled on demand |
 | **A `.gitignore` decorated with box-drawing characters** (Claude) | The `# ── …` header made the file non-ASCII, so the byte-check prediction given alongside it (`35 32 32 32`) was wrong. Decoration in a file whose first bytes get verified is a defect, not a style |
 | **Assuming the project path from STATE.md** (Claude) | A `cd` was issued to the path recorded in the file. The project had been moved and the file was stale. STATE.md is only as good as its last update |
 | **Predicting the GitHub account already existed** (Claude) | Item 4 was planned in detail before checking that its precondition held. Cheap to verify, expensive to assume |
