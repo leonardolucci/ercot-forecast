@@ -4,40 +4,44 @@
 > share history: the only things that persist are the instructions and this
 > knowledge. It is updated at the end of EVERY session.
 
-**Last updated:** 2026-09-24
+**Last updated:** 2026-10-27
 **Current phase:** 1 — Foundation
-**Week:** 6 of 8 (calendar). Effective work: session 2 of the phase.
-**Cumulative hours:** ~8 h
+**Week:** 10 (calendar). Phase 1 was planned as weeks 1-8; that window closed
+on 2026-10-13. Effective work: 3 sessions.
+**Cumulative hours:** ~9 h
 
 ---
 
 ## 1. Where we are today
 
-Session 2 of the **repository setup** block. Items 2, 3 and 4 are closed. Items 5
-(README) and 6 (CLAUDE.md) remain.
+Session 3 (opened 2026-09-26, closed 2026-10-27) did the carried-over axis B
+re-test (outcome in section 7). It did not reach items 5 and 6, and no command
+was run. Setup agenda: **4 of 6**. No project chat took place between
+2026-09-26 and 2026-10-27.
 
-**The project is now on GitHub.** `github.com/leonardolucci/ercot-forecast`,
-public, one commit (`87ee3d8`, root commit, 20 files). Open problem 2 from the
-previous session is closed: the code no longer exists on a single disk.
+**The development machine changed.** On 2026-10-21 the notebook was wiped and
+now runs **Xubuntu 26.04.1 LTS** (bash). Windows 10 was erased, and with it,
+unless backed up: the local clone at `C:\Users\<user>\dev\ercot-forecast`, its
+`.venv`, the global Git config and the GitHub credentials stored in Windows
+Credential Manager. Nothing committed was lost: GitHub holds all of it.
 
-**The project moved.** New location:
+Not yet verified on Xubuntu: git, uv, VS Code, the clone itself. Session 4 is
+the first project session on Linux.
 
-```
-C:\Users\<user>\dev\ercot-forecast
-```
+**Repository:** `github.com/leonardolucci/ercot-forecast`, public. `main` at
+`54a19fa` (`docs: record instructions recalibration in STATE.md`), the last
+recorded push. **This version of STATE.md is not in the repo yet:** it gets
+committed in session 4, right after the clone.
 
-It was previously at `Desktop\Projects\ERCOT - Forecasting y decision\`. Moved
-before `git init`, for reasons recorded in the decisions table.
-
-State of the tree (only tracked files; `.venv/` exists on disk and is ignored):
+Tracked tree, as last recorded:
 
 ```
 ercot-forecast/
-├── .gitattributes        NEW — line-ending policy
-├── .gitignore            NEW
-├── .python-version       NEW — "3.13"
-├── pyproject.toml        NEW
-├── uv.lock               NEW
+├── .gitattributes        line-ending policy
+├── .gitignore
+├── .python-version       "3.13"
+├── pyproject.toml
+├── uv.lock
 ├── README.md             empty — item 5
 ├── config/               .gitkeep
 ├── docs/                 ROADMAP.md, STATE.md, STRUCTURE.md
@@ -53,10 +57,12 @@ ercot-forecast/
         └── decision/     __init__.py
 ```
 
-**Environment:** uv 0.12.9, CPython 3.13.15 (downloaded and managed by uv, not
-installed system-wide — there is still no system Python on the machine). The
-package is installed editable; `import ercot_forecast` resolves to
-`src\ercot_forecast\__init__.py`, verified.
+**Environment, as declared in the repo:** `requires-python = "==3.13.*"` and
+`.python-version` = `3.13`. uv downloads and manages the interpreter, so on a
+fresh Xubuntu clone `uv sync` must fetch CPython 3.13 by itself and install
+the package editable. Verified on Windows in session 2 (uv 0.12.9, CPython
+3.13.15); not yet on Linux. That re-verification is also the first real test
+of the README's reproduce instructions.
 
 `data/` and `artifacts/` still do not exist, on purpose.
 
@@ -73,21 +79,22 @@ package is installed editable; `import ercot_forecast` resolves to
 | 2026-08-26 | `data/` and `artifacts/` are NOT created by hand | If they exist because of a manual act, the code will assume they are there and will fail on a clean clone. This is a reproducibility test, not an inconvenience |
 | 2026-08-26 | No `utils/` and no speculative folders | `utils/` means "I did not decide where this goes" and ends up untested. Folders with no defined role lie to whoever reads the repo |
 | 2026-08-26 | ROADMAP, STATE, STRUCTURE live in `docs/` | The root holds only what a tool reads by convention or what a stranger needs in the first 30 seconds |
-| 2026-08-26 | Shell: PowerShell (not Git Bash) | Native Windows paths, VS Code integrated terminal. **Reversible at no cost** |
 | 2026-08-26 | **Calibrated depth rule** | Maximum depth where a bad decision corrupts the methodology. Minimum depth where it is reversible in 5 minutes. See section 6 |
 | 2026-08-27 | Working language switched to English | Deliberate English practice on top of the technical work |
 | 2026-09-10 | **Dependency manager: `uv`** | Owns all four jobs — obtain interpreter, isolate, resolve, record — in one tool instead of four. Decisive factor: it manages the **interpreter** itself, so the Python version is a declared repository fact rather than a machine property. Not locked in: `pyproject.toml` is the standard format |
-| 2026-09-10 | **Project moved to `C:\Users\<user>\dev\`** | `Desktop\` is one OneDrive "Manage backup" checkbox away from being synced. A sync engine underneath `.git\` causes lock contention, conflict copies inside `objects\`, and dehydrated placeholders that look like present files. Also cut the path from 81 to 37 characters and removed a space from a folder I control. Verified at the time: KFM was NOT active, `$env:OneDrive` set but syncing only `OneDrive\` |
+| 2026-09-10 | **Repository location: short path, no spaces, outside any synced folder** | A sync engine underneath `.git/` causes lock contention, conflict copies inside `objects/`, and dehydrated placeholders that look like present files (on Windows, OneDrive "Manage backup" was one checkbox away). Applied on Windows as `C:\Users\<user>\dev\`, 37 characters instead of 81. The Linux path is set in session 4 |
 | 2026-09-10 | `uv init --lib --vcs none --python 3.13` | `--lib` writes the `[build-system]` table; without it uv treats the project as *virtual* and never installs the package, so `src/` would silently break every import. `--vcs none` keeps `git init` and `.gitignore` as deliberate agenda items rather than a side effect. `--python 3.13` states the interpreter instead of letting uv pick |
 | 2026-09-10 | `requires-python = "==3.13.*"` (not `>=3.13`) | The unbounded form propagates into `uv.lock` and forces every dependency to be valid on 3.14, 3.15 and beyond, causing silent fallback to older releases. This is an application with exactly one interpreter, not a library. 3.13 rather than 3.14 because wheel availability for the scientific stack lags the interpreter release |
-| 2026-09-10 | **Commit email: GitHub noreply** (`326698764+leonardolucci@users.noreply.github.com`), set `--global` | Commit metadata is immutable and public; the address would be scraped from every commit forever. Attribution to the account is unaffected. Both GitHub email-privacy checkboxes enabled, including *Block command line pushes that expose my email* — turns a silent permanent leak into a loud rejected push |
+| 2026-09-10 | **Commit email: GitHub noreply** (`326698764+leonardolucci@users.noreply.github.com`), set `--global` on every machine | Commit metadata is immutable and public; the address would be scraped from every commit forever. Attribution to the account is unaffected. Both GitHub email-privacy checkboxes enabled, including *Block command line pushes that expose my email* — turns a silent permanent leak into a loud rejected push |
 | 2026-09-10 | `authors = [{ name = "Leonardo Lucci" }]`, no email in `pyproject.toml` | Packaging metadata is machine-readable and harvested; it is not where a human looks. The contact point goes in the README (item 5), where it stays editable forever |
 | 2026-09-10 | `init.defaultBranch main` | GitHub's default. Set before `git init` to avoid renaming a branch after a remote exists |
 | 2026-09-10 | **`.gitattributes` with `* text=auto eol=lf`** — not on the original agenda | `core.autocrlf` is a machine property and does not travel with the repo. Without this, a collaborator or the Linux CI runner commits CRLF blobs and every diff shows every line changed. `.gitattributes` is *tracked*, so the policy belongs to the repository. Exceptions for `*.bat` / `*.cmd`, which `cmd.exe` genuinely mis-parses with LF |
-| 2026-09-10 | **Authentication: HTTPS + Git Credential Manager**, not PAT or SSH | Ships with Git for Windows, needs no setup, uses GitHub's OAuth flow in a browser and stores the token encrypted in Windows Credential Manager. No raw secret is ever handled, pasted or rotated. Worked first try |
+| 2026-09-10 | **Authentication: browser OAuth, never a pasted token** (on Windows: HTTPS + Git Credential Manager) | No raw secret is ever handled, pasted or rotated; the token is stored by the OS. GCM shipped with Git for Windows and worked first try. It does not ship with Git on Linux, so the Linux equivalent is chosen in session 4 under the same constraint |
 | 2026-09-10 | GitHub repo created **empty** (no README, no .gitignore, no licence) | An initialised remote has a commit with no common ancestor with the local root commit; the first push is rejected and the usual escapes (`--allow-unrelated-histories`, force-push) teach the workflow wrong |
 | 2026-09-10 | Conventional Commits (`chore:`, `feat:`, `fix:`…) + imperative mood | Free to adopt, reads as professional, and lets CI generate a changelog in Phase 2 |
 | 2026-09-24 | **Project instructions rewritten: short by default, depth on demand** | Reading long responses was eating most of the session budget, leaving little for execution. The calibrated depth rule already existed but was one exception inside a section written for depth, so it lost. Now brevity is the default, "deeper" expands one point, and depth has three tiers (reversible / hard to reverse / methodology-critical), with check questions only in the critical tier, delivered in short rounds |
+| 2026-09-26 | **Folders under `data/` and `artifacts/` are created inside the function that writes, when it writes — never at module level** | A module-level `mkdir` makes `import` change the disk in every state where the folder is missing: a fresh clone, CI, or any process whose current directory is not the repo root (the path is relative). Axis B requires an import to change nothing in every state; `exist_ok=True` makes the change idempotent, not absent |
+| 2026-10-21 | **Development machine: the same notebook, now Xubuntu 26.04.1 LTS (bash); Windows 10 erased** | Decided outside the project chats; the notebook does not meet Windows 11 requirements. Consequences: Windows-only traps removed from section 6; clone, `.venv`, global Git config and credentials are rebuilt in session 4 |
 
 ---
 
@@ -96,7 +103,7 @@ package is installed editable; `import ercot_forecast` resolves to
 Setup agenda (6 items):
 
 - [x] 1. Directory structure — explained, materialised on disk, verified
-- [x] 2. Reproducible environment — uv, CPython 3.13.15, `.venv`, `pyproject.toml` + `uv.lock`, editable install verified
+- [x] 2. Reproducible environment — uv, CPython 3.13, `pyproject.toml` + `uv.lock`, editable install verified on Windows (to re-verify on Xubuntu in session 4)
 - [x] 3. `.gitignore` for a data project — written, encoding verified, behaviour verified against `git status`
 - [x] 4. `git init`, first commit, GitHub repo, remote connected, **pushed**
 - [ ] 5. Initial `README.md`
@@ -111,22 +118,51 @@ Phase 1 (beyond setup):
 
 ## 4. Next concrete step
 
-**Items 5 and 6, kept lean, then open the ingestion block.**
+**Session 4: rebuild on Xubuntu, then items 5 and 6, in that order.**
+Suggested caps: rebuild 45 min, items 5 and 6 together 1 h. If the rebuild
+overruns, items 5 and 6 move to session 5 instead of being squeezed.
 
-Item 5 — README. What a stranger needs in the first 30 seconds: what this is,
-what problem it solves, how to reproduce it (`git clone` + `uv sync`, nothing
-else), and one contact line. The GitHub *About* field and topics also need
-filling; right now the repo page says "No description, website, or topics
-provided".
+**Step 0 — rebuild, nothing more.** Each item is the minimum needed to commit
+again:
 
-Item 6 — `CLAUDE.md` at the root: the hard rules, the pipeline order, the
-point-in-time discipline, the depth rule.
+- **Git identity before any commit:** `user.name` = `Leonardo Lucci`,
+  `user.email` = the noreply address in section 2. Hard to reverse: commit
+  metadata is public and permanent.
+- **GitHub authentication from Linux.** Same constraint as on Windows:
+  browser OAuth, no raw token pasted.
+- **uv, then `git clone`** into a short path with no spaces (proposed:
+  `~/dev/ercot-forecast`), **`uv sync`, and verify** that
+  `import ercot_forecast` resolves to `src/ercot_forecast/__init__.py`.
+  Confirm `main` is at `54a19fa` with `git log --oneline -1`.
+- **Copy this STATE.md into `docs/`.** It becomes the first commit of the
+  feature branch.
 
-**Budget warning, raised under hard rule 8:** Phase 1 is 8 calendar weeks and
-week 6 is under way with zero ingestion code written. Setup does not repeat, but
-items 5 and 6 are documentation. If session 3 spends its full budget on prose,
-that is three sessions of meta-work before a single byte of ERCOT data exists on
-disk. Cap them and move on.
+**Item 5 — README.** What a stranger needs in the first 30 seconds: what this
+is, what problem it solves, how to reproduce it (`git clone` + `uv sync`, as
+verified in step 0), current status stated truthfully, one contact line. Then
+the GitHub *About* field and topics, both empty at the last check.
+
+**Item 6 — `CLAUDE.md`.** Transcription, ASCII only: pipeline order,
+point-in-time discipline and the `available_at` rule, import direction,
+derived vs. source, what is never committed. Two precision traps to settle in
+the text:
+
+- STRUCTURE.md's flow diagram says "imports point rightward only"; the
+  2026-08-26 decision says "an import only points leftward". Same rule,
+  opposite meanings of *points*. State it operationally: a module may import
+  from its own stage or any stage to its left, never to its right (`features`
+  may import `ingest`; `ingest` may never import `features`). Fix
+  STRUCTURE.md's wording in the same pull request.
+- The pipeline order (data → features → baseline → model → evaluation →
+  decision) and the subpackage import order (ingest → features → models →
+  evaluation → decision) are different lists: baselines and models both live
+  in `models/`. Do not conflate them.
+
+**Git workflow, taught on this work:** feature branch, one atomic commit per
+file (STATE.md, README.md, CLAUDE.md, STRUCTURE.md), push, pull request,
+merge, delete branch, sync local `main`.
+
+Then: the ingestion chat, cheatsheet prompt 02.
 
 ---
 
@@ -142,16 +178,17 @@ disk. Cap them and move on.
    manifest lives outside `data/`.
    **To be solved in week 2 of real work, not today.**
 
-2. ~~Nothing is under version control yet.~~ **CLOSED 2026-09-10.** Commit
-   `87ee3d8` pushed to `github.com/leonardolucci/ercot-forecast`.
+2. **Time budget.** Phase 1 was planned as 8 calendar weeks at ~10 h/week
+   (~80 h). At calendar week 10 the count is ~9 h across 3 sessions, setup at
+   4 of 6 and no ingestion code. There was no project chat between 2026-09-26
+   and 2026-10-27; the machine migration happened in that gap. Session 4 adds
+   a rebuild before items 5 and 6, so ingestion starts in session 5 at the
+   earliest. The 8-week window is gone. **Decision owed:** a new Phase 1 end
+   date, set from the hours actually available rather than from the
+   assumption. Make it in five minutes at the start of the ingestion block,
+   not before.
 
-3. ~~`docs/` has no `.gitkeep`.~~ **CLOSED.** It holds ROADMAP.md, STATE.md and
-   STRUCTURE.md, so it travels to Git on its own content.
-
-4. **Time budget.** Week 6 of 8, setup at 4 of 6, no pipeline code.
-   See the warning in section 4.
-
-5. **`README.md` is empty and public.** Anyone reaching the repo today sees a
+3. **`README.md` is empty and public.** Anyone reaching the repo today sees a
    directory listing and nothing else. Closed by item 5.
 
 ---
@@ -164,29 +201,31 @@ disk. Cap them and move on.
 | **A `.gitignore` decorated with box-drawing characters** (Claude) | The `# ── …` header made the file non-ASCII, so the byte-check prediction given alongside it (`35 32 32 32`) was wrong. Decoration in a file whose first bytes get verified is a defect, not a style |
 | **Assuming the project path from STATE.md** (Claude) | A `cd` was issued to the path recorded in the file. The project had been moved and the file was stale. STATE.md is only as good as its last update |
 | **Predicting the GitHub account already existed** (Claude) | Item 4 was planned in detail before checking that its precondition held. Cheap to verify, expensive to assume |
-| **`foreach` loops in PowerShell to create the tree** | Unnecessary. `New-Item` accepts several comma-separated paths in one `-Path` |
+| **Re-test design, session 3** (Claude) | The first axis B case depended on code that does not exist yet (a feature module, a backtest, the `available_at` filter), so it tested the future, not the axis. A formal notation (import as a function on a world state) then made a concrete disk question abstract, and a "verdict" was requested without stating its form. What worked: a case built only from files on disk, two named disk states, explicit pass/fail options, and a contrast case that changes one variable (the same `mkdir` line at top level vs. inside a `def`) |
 
 **Traps recorded for the future:**
 
-- **`New-Item -ItemType File -Force` on a file that already has content wipes
-  it**, without asking and with no recycle bin. Safe version:
-  `New-Item -ItemType File -Path path -ErrorAction SilentlyContinue`.
-  On `Directory`, `-Force` is harmless (it only means "do not error if it
-  exists"). Same flag, opposite consequence.
-- **Never create text config files with `>` or `Out-File` on PowerShell 5.1.**
-  They default to UTF-16LE with a BOM; Git reads the file as binary and not one
-  pattern matches, silently. Use the editor. Verify with
-  `Get-Content <file> -Encoding Byte -TotalCount 4` — `255 254` is a UTF-16 BOM.
+- **Git identity is per machine.** `git config --global` writes to the user's
+  home directory, not to the repository, so it does not travel with a clone.
+  Set `user.name` and `user.email` on every new machine before its first
+  commit; otherwise Git may build an address from `user@hostname` and push it
+  into public, permanent history.
+- **Python `import` executes the module, once per process.** Every top-level
+  statement runs at the first import; a `def` only creates the function, and
+  its body runs when called. Importing a subpackage runs the parent package's
+  `__init__.py` first. That is what makes axis B mechanical: read only the
+  top-level lines. *Idempotent* is not *no effect*: `mkdir(exist_ok=True)`
+  still creates the folder the first time.
 - **VS Code's "New File" creates the file relative to the current explorer
-  selection**, not the workspace root. This put a `.gitignore` inside `.venv\`
+  selection**, not the workspace root. This put a `.gitignore` inside `.venv/`
   once. Check the path before saving.
-- **A new terminal starts at `$env:USERPROFILE` and discards any earlier `cd`.**
-  Both `uv` and `git` find their project by walking *upward* from the current
-  directory, never downward — hence `No pyproject.toml found in current
-  directory or any parent directory`. Opening the folder in VS Code makes every
-  integrated terminal start at the workspace root.
+- **A new terminal starts in the home directory and discards any earlier
+  `cd`.** Both `uv` and `git` find their project by walking *upward* from the
+  current directory, never downward — hence `No pyproject.toml found in
+  current directory or any parent directory`. Opening the folder in VS Code
+  makes every integrated terminal start at the workspace root.
 - **`git add .` stages relative to the current directory**, not the repository
-  root. From `src\` it silently stages only `src\`. `git add -A` is
+  root. From `src/` it silently stages only `src/`. `git add -A` is
   repository-wide regardless of position.
 - **Staging is a snapshot of content, not a pointer to a file.** Editing a file
   after `git add` leaves the staged version untouched; `git status` will list it
@@ -196,28 +235,22 @@ disk. Cap them and move on.
   anything already in the index, and is not retroactive. This is why it had to
   exist before the first commit.
 - **`uv` does not overwrite existing source files.** `uv init` left the existing
-  empty `__init__.py` alone instead of writing its template. Opposite behaviour
-  to `New-Item -Force`.
+  empty `__init__.py` alone instead of writing its template.
 
 ---
 
 ## 7. Questions for the next session
 
-- **Re-test with fresh cases** (answers were given, not produced — verification
-  is still owed):
-  - Axis **A**: `.venv/` is ignored and `uv.lock` is committed, both generated
-    by a tool. The sharpened test: *is the regeneration a function of the
-    repository alone, or does it depend on the outside world at the moment you
-    run it?* The source/derived boundary is drawn at the last point where
-    information entered from outside.
-  - Axis **B**: a module that hits the network at import time is not merely
-    misfiled — the design is wrong. Axis B is a design smell detector, and
-    invariant 3 (the leakage test) depends on it.
-  - Axis **D**: the discriminator is whether a second value is *legitimate*,
-    not whether it is *possible*.
-  - Why a `FileNotFoundError` on a clean CI clone is good news: a clean clone is
-    the only environment with no accumulated local state, so it is the only
-    honest test of reproducibility. The bad outcome is the test passing.
+- **Axis B, session 3 outcome.** Produced by Leonardo: the mechanism. `import`
+  runs every top-level line once per process; a `def` only creates the
+  function, and its body runs when called, so a module whose `mkdir` sits
+  inside a `def` passes. Not produced: the verdict on the failing case. A
+  module-level `mkdir` in `__init__.py` fails, because the disk today (or any
+  fresh clone) is a state where the import creates a folder, and one such state
+  is enough. That verdict came from Claude after a wrong answer.
+  **Real re-test, at no extra cost:** in the ingestion block, Leonardo decides
+  which lines of the first ingestion code go to `scripts/` and which to
+  `src/ercot_forecast/ingest/`, and why.
 - Deferred until after setup, not before:
   - Schema of the raw price table
   - Storage format (partitioned Parquet + DuckDB)
