@@ -74,7 +74,7 @@ directory if it does not exist.*
               │
               ▼
    ingest → features → models → evaluation → decision
-              │            (imports point rightward only)
+              │            (a stage imports only from itself or stages to its left)
               ▼
       artifacts/ + prose in docs/
 ```
